@@ -7,6 +7,10 @@ AUTHOR: ING.EDUARDO CABRERA MONTERO
 HERRAMIENTA DE CONFIGURACIÓN DE FONDO DE PANTALLA PARA LINUX.
 
 ```console
+git clone https://github.com/EDISC255/backskreen.git
+```
+
+```console
 javac Backskreen.java
 ```
 
