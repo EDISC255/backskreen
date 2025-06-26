@@ -16,6 +16,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class BackSkreen extends JFrame {
     public BackSkreen() {
@@ -71,10 +73,29 @@ public class BackSkreen extends JFrame {
         try {
             String cmd[] = { "feh", "--bg-fill", imagen };
             Runtime.getRuntime().exec(cmd);
+            guardar("feh --bg-fill " + imagen);
             // System.out.println(cmd[2]);
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public void guardar(String cmd) {
+        try {
+            String homeDir = System.getenv("HOME");
+            aux = new File(homeDir + "/.config/bg.sh");
+            if (!aux.exists()) {
+                aux.createNewFile();
+            }
+            FileWriter fw = new FileWriter(aux);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(cmd);
+            bw.close();
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+
     }
 
     public void llenarLista() {
