@@ -3,10 +3,12 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import java.awt.Color;
@@ -22,7 +24,7 @@ import java.io.FileWriter;
 public class BackSkreen extends JFrame {
     public BackSkreen() {
         init();
-        llenarLista();
+        llenarLista(System.getenv("HOME"));
     }
 
     private void init() {
@@ -63,10 +65,23 @@ public class BackSkreen extends JFrame {
                 aplicar();
             }
         });
+
+        btnSeleccionarCarpeta = new JButton();
+        btnSeleccionarCarpeta.setText("SELECCIONAR CARPETA");
+        btnSeleccionarCarpeta.setSize(100, 50);
+        btnSeleccionarCarpeta.setBounds(200, 135, 200, 25);
+
+        btnSeleccionarCarpeta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                llenarLista(seleccionarCarpeta());
+            }
+        });
+
         this.add(scrollPane);
         scrollPane.updateUI();
         this.add(pnlPreview);
         this.add(btnAplicar);
+        this.add(btnSeleccionarCarpeta);
     }
 
     private void aplicar() {
@@ -98,10 +113,10 @@ public class BackSkreen extends JFrame {
 
     }
 
-    public void llenarLista() {
+    public void llenarLista(String directorio) {
         try {
             DefaultListModel dlm = new DefaultListModel();
-            aux = new File("/home/eduardo/Wallpapers");
+            aux = new File(directorio);
             String[] archivos = aux.list();
             if (archivos == null || archivos.length == 0) {
                 JOptionPane.showMessageDialog(this, "directorio vacio");
@@ -125,6 +140,16 @@ public class BackSkreen extends JFrame {
         preview.drawImage(new ImageIcon(imagen).getImage(), 0, 0, pnlPreview.getWidth(), pnlPreview.getHeight(), null);
     }
 
+    public String seleccionarCarpeta() {
+        JFileChooser carpeta = new JFileChooser();
+        carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int opcionSeleccionada = carpeta.showOpenDialog(this);
+        if (opcionSeleccionada == JFileChooser.APPROVE_OPTION) {
+            return carpeta.getSelectedFile().getAbsolutePath();
+        }
+        return System.getenv("HOME");
+    }
+
     public static void main(String arg[]) {
         new BackSkreen().setVisible(true);
     }
@@ -132,7 +157,7 @@ public class BackSkreen extends JFrame {
     private File aux;
     private String imagen;
     private JPanel pnlPreview;
-    private JButton btnAplicar;
+    private JButton btnAplicar, btnSeleccionarCarpeta;
     private JList lstImagenes;
     private JScrollPane scrollPane;
 }
